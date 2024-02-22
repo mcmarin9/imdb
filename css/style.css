@@ -1,0 +1,11 @@
+/* Agrega estilos al archivo de estilo (style.css) o directamente en el HTML */
+.uk-card-body {
+    background-color: #f7f7f7;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.uk-margin {
+    margin-bottom: 10px;
+}
