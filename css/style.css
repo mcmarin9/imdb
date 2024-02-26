@@ -1,11 +1,93 @@
-/* Agrega estilos al archivo de estilo (style.css) o directamente en el HTML */
-.uk-card-body {
-    background-color: #f7f7f7;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', 'Arial', sans-serif;
 }
 
-.uk-margin {
-    margin-bottom: 10px;
+
+body {
+    background-color: lightgrey;
+}
+
+.header-shift {
+    margin-left: 270px;
+    transition: margin-left 0.5s ease-in-out;
+
+}
+
+header {
+    background-color: #333;
+    padding: 10px;
+    font-size: 1.8em;
+    text-align: center;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    >* {
+        margin: 0 20px;
+    }
+}
+
+
+
+#logo {
+    height: auto;
+    width: 100px;
+}
+
+header h1 {
+    color: white;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: 900;
+    margin: 0;
+}
+
+span[uk-icon="icon: menu; ratio: 2"] {
+    color: white;
+}
+
+#card-list .movie-card {
+    width: 30%;
+    margin: 10px;
+}
+
+.movie-card img {
+    width: 100%; 
+    padding: 15PX;
+}
+
+.movie-card .uk-card-media-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body .uk-badge {
+    color: #333;
+
+    position: absolute;
+    left: 5px;
+    top: 5px;    
+}
+body .uk-badge-large {
+    font-size: 1em;
+    padding: 13px;
+    font-weight: bold;
+    color: #333;
+    background-color: #f3ce13; /* Asegúrate de que el padding sea igual en todos los lados para que el badge sea redondo */
+}
+
+.uk-offcanvas-bar {
+    overflow-y: auto;
+    scrollbar-width: none; /* Para Firefox */
+    -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+}
+
+.uk-offcanvas-bar::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari y Opera */
 }
