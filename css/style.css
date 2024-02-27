@@ -1,25 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Raleway', 'Arial', sans-serif;
+:root {
+    --amarillo-imdb: #f3ce13;
+    --fondo-cuerpo: rgb(238, 237, 237);
+    --fondo-cabecera: #333;
+    --texto-blanco: #fff;
+    --texto-negro: #000;
+    --texto-verde: #00ff00;
+    --color-sombra-caja: rgba(0, 0, 0, 0.2);
+    --color-sombra-caja-hover: rgba(0, 0, 0, 0.3);
 }
 
-
+/* GENERAL */
 body {
-    background-color: lightgrey;
+    background-color: var(--fondo-cuerpo);
 }
 
-.header-shift {
-    margin-left: 270px;
-    transition: margin-left 0.5s ease-in-out;
-
+p {
+    padding: -10px !important;
+    margin-top: 10px !important;
 }
 
+*+address,
+*+dl,
+*+fieldset,
+*+figure,
+*+ol,
+*+p,
+*+pre,
+*+ul {
+    margin: 10px 0px !important;
+}
+
+.uk-icon-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.uk-icon-button:hover {
+    background-color: var(--amarillo-imdb) !important;
+    color: var(--texto-blanco);
+}
+
+#copy {
+    margin: 0px;    padding: 10px;
+    color: var(--texto-blanco);
+    background-color: var(--fondo-cabecera) ;
+}
+
+.pagination-active {
+    font-weight: bold;
+}
+
+li > a {
+    color: var(--fondo-cabecera) !important;
+}
+
+/* HEADER */
 header {
-    background-color: #333;
+    background-color: var(--fondo-cabecera);
+    color: var(--texto-blanco);
     padding: 10px;
     font-size: 1.8em;
     text-align: center;
@@ -32,62 +73,217 @@ header {
     }
 }
 
-
-
 #logo {
     height: auto;
     width: 100px;
 }
 
 header h1 {
-    color: white;
+    color: var(--texto-blanco);
     font-size: 1.5em;
     text-transform: uppercase;
     font-weight: 900;
     margin: 0;
 }
 
-span[uk-icon="icon: menu; ratio: 2"] {
-    color: white;
+.header-shift {
+    margin-left: 270px;
+    transition: margin-left 0.2s ease-in-out;
 }
 
+span[uk-icon="icon: menu; ratio: 2"] {
+    color: var(--texto-blanco);
+}
+
+/* OFFCANVAS */
+.uk-offcanvas-bar {
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.uk-offcanvas-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.abrir-modal {
+    cursor: pointer;
+    border-radius: 25px !important;
+    padding: 5px !important;
+    color: var(--amarillo-imdb) !important;
+    transition: background-color 0.3s ease;
+}
+
+.abrir-modal:hover {
+    color: var(--amarillo-imdb) !important;
+}
+
+/* GRAFICOS */
+.chart-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    text-transform: uppercase;
+    color: var(--texto-blanco);
+}
+
+.chart-title {
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* CARDS */
 #card-list .movie-card {
     width: 30%;
     margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px var(--color-sombra-caja);
+    transition: transform 0.3s ease-in-out;
 }
 
-.movie-card img {
-    width: 100%; 
-    padding: 15PX;
+#card-list .movie-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 5px 15px var(--color-sombra-caja-hover);
 }
 
-.movie-card .uk-card-media-left {
+.uk-cover-container {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-body .uk-badge {
-    color: #333;
+.anio-nota {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px;
 
-    position: absolute;
-    left: 5px;
-    top: 5px;    
+    >p {
+        margin: 0 10px !important;
+    }
 }
+
 body .uk-badge-large {
     font-size: 1em;
-    padding: 13px;
     font-weight: bold;
-    color: #333;
-    background-color: #f3ce13; /* Asegúrate de que el padding sea igual en todos los lados para que el badge sea redondo */
+    background-color: var(--amarillo-imdb);
 }
 
-.uk-offcanvas-bar {
-    overflow-y: auto;
-    scrollbar-width: none; /* Para Firefox */
-    -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+.uk-grid {
+    margin: 10px !important;
+    padding: 0 !important;
 }
 
-.uk-offcanvas-bar::-webkit-scrollbar {
-    display: none; /* Para Chrome, Safari y Opera */
+.uk-card-body {
+    padding: 15px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.movie-card img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    padding: 15px;
+}
+
+.movie-card .uk-badge {
+    padding: 6px;
+}
+
+/* ALTO CONTRASTE */
+#toggleContrastButton {
+    position: absolute;
+    right: 20px;
+    font-size: 15px;
+    color: var(--texto-blanco);
+}
+
+#toggleContrastButton:hover {
+    color: var(--amarillo-imdb);
+}
+
+.high-contrast {
+    background-color: var(--texto-negro);
+    color: var(--texto-blanco);
+    border-color: var(--texto-blanco);
+}
+
+.high-contrast a {
+    color: var(--texto-blanco) !important;
+}
+
+.high-contrast button {
+    background-color: var(--texto-blanco);
+    color: var(--texto-negro);
+    border-color: var(--texto-negro);
+}
+
+.high-contrast input,
+.high-contrast textarea {
+    background-color: var(--texto-blanco);
+    color: var(--texto-negro);
+    border-color: var(--texto-negro);
+}
+
+.high-contrast img {
+    filter: grayscale(100%);
+}
+
+.high-contrast p,
+.high-contrast h3 {
+    color: var(--texto-negro);
+    font-weight: bold;
+}
+
+.high-contrast .uk-badge {
+    background-color: var(--texto-negro);
+    color: var(--texto-blanco);
+    border-color: var(--texto-negro);
+}
+
+.high-contrast .offset .uk-icon, .high-contrast .uk-close {
+    background-color: var(--texto-blanco);
+    color: var(--texto-negro) !important;
+}
+
+.high-contrast .abrir-modal
+ {
+    color: var(--texto-negro) !important;
+    background-color: var(--texto-blanco) !important;
+}
+
+.high-contrast .uk-icon-button {
+    background-color: var(--texto-blanco) !important;
+    color: var(--texto-negro) !important;
+}
+
+
+/* TAMAÑO PEQUEÑO */
+@media (max-width: 768px) {
+    #card-list .movie-card {
+        width: 80%;
+        margin: 10px;
+    }
+
+    .uk-padding-small {
+        padding: 20px;
+        align-self: center;
+    }
+
+    .header-shift {
+        margin-left: 0px;
+        transition: margin-left 0.2s ease-in-out;
+    }
 }

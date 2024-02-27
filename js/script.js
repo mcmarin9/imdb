@@ -1,6 +1,6 @@
 const url = 'https://raw.githubusercontent.com/mcmarin9/imdb/master/imdb_top_1000.json';
 
-const itemsPerPage = 10;
+const itemsPerPage = 21;
 let currentPage = 1;
 
 function showPage(data, page) {
@@ -10,7 +10,6 @@ function showPage(data, page) {
   const cardsContainer = document.getElementById('card-list');
   cardsContainer.innerHTML = '';
 
-   // Crear un contenedor adicional para uk-grid
   const gridContainer = document.createElement('div');
   gridContainer.className = 'uk-grid uk-child-width-1-2@s';
 
@@ -20,35 +19,32 @@ function showPage(data, page) {
     card.className = 'uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s movie-card';
     card.setAttribute('uk-grid', '');
     card.innerHTML = `
-    <div class="uk-card-media-left uk-cover-container">
-    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}" uk-image class="movie-image">
-        <!-- <canvas width="600" height="400"></canvas>-->
-    </div>
-    <div>
+        <div class="uk-card-media-left uk-cover-container">
+          <img src="${movie.Poster_Link}" uk-image class="movie-image" alt="Poster de la película ${movie.Series_Title}">
+        </div>
         <div class="uk-card-body">
             <h3 class="uk-card-title">${movie.Series_Title}</h3>
-            <!-- <span class="uk-badge uk-badge-large">${i+1}</span> -->
-            <p><span uk-icon="icon: calendar"></span>${movie.Released_Year}</p>
-            <p><span uk-icon="icon: star"></span> ${movie.IMDB_Rating} / 10</p>
-            <p><span uk-icon="icon: warning"></span> ${movie.Certificate}</p>
-            <button class="uk-button uk-button-default" type="button" uk-toggle="target: #more-info-${i}">Ver más</button>
-
-            <div id="more-info-${i}" uk-modal>
-               <div class="uk-modal-dialog uk-modal-body">
-                    <h2 class="uk-modal-title">Detalles</h2>
-                    <p>Duración: ${movie.Runtime}</p>
-                    <p>Género: ${movie.Genre}</p>
-                    <p>Director: ${movie.Director}</p>
-                    <p>Actores: ${movie.Star1}, ${movie.Star2}, ${movie.Star3}, ${movie.Star4}</p>
-                    <p>Número de Votos: ${movie.No_of_Votes}</p>
-                    <p>Ingresos: ${movie.Gross}</p>
-                    <p>Resumen: ${movie.Overview}</p>
-                    <p>Meta score: ${movie.Meta_score}</p>
-                </div> 
+            <div class='anio-nota'>
+                <p><span uk-icon="icon: calendar"></span> ${movie.Released_Year}</p>
+                <p><span class="uk-badge uk-badge-large">${movie.IMDB_Rating}</span></p>
             </div>
+            <p>${movie.Genre}</p>
+            <p><span uk-icon="icon: clock"></span> ${movie.Runtime}</p>
+            <button class="uk-button uk-button-default" type="button" uk-toggle="target: #more-info-${i}">Ver más</button>
         </div>
-    </div>
-    `;
+        <div id="more-info-${i}" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body">
+                <h2 class="uk-modal-title">Detalles</h2>
+                <p>Director: ${movie.Director}</p>
+                <p>Certificado: ${movie.Certificate}</p>
+                <p>Actores: ${movie.Star1}, ${movie.Star2}, ${movie.Star3}, ${movie.Star4}</p>
+                <p>Número de Votos: ${movie.No_of_Votes}</p>
+                <p>Ingresos: ${movie.Gross}</p>
+                <p>Resumen: ${movie.Overview}</p>
+                <p>Meta score: ${movie.Meta_score}</p>
+            </div> 
+        </div>
+            `;
     cardsContainer.appendChild(card);
   }
 }
@@ -59,34 +55,107 @@ function updatePagination(data) {
   const paginationContainer = document.getElementById('pagination');
   paginationContainer.innerHTML = '';
 
-  for (let i = 1; i <= totalPages; i++) {
+  const maxPagesToShow = 10;
+  const pagesBeforeCurrent = Math.floor(maxPagesToShow / 2);
+  const pagesAfterCurrent = Math.ceil(maxPagesToShow / 2);
+
+  const startPage = Math.max(currentPage - pagesBeforeCurrent, 1);
+  const endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
+
+  const firstPageItem = document.createElement('li');
+  firstPageItem.innerHTML = `<a href="#"><span uk-icon="icon: chevron-double-left"></span></a>`;
+  firstPageItem.addEventListener('click', () => {
+    currentPage = 1;
+    showPage(data, currentPage);
+    updatePagination(data);
+  });
+  paginationContainer.appendChild(firstPageItem);
+
+  const prevPageItem = document.createElement('li');
+  prevPageItem.innerHTML = `<a href="#"><span uk-icon="icon: chevron-left"></span></a>`;
+  prevPageItem.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      showPage(data, currentPage);
+      updatePagination(data);
+    }
+  });
+  paginationContainer.appendChild(prevPageItem);
+
+  for (let i = startPage; i <= endPage; i++) {
     const listItem = document.createElement('li');
     listItem.innerHTML = `<a href="#">${i}</a>`;
     listItem.addEventListener('click', () => {
       currentPage = i;
       showPage(data, currentPage);
+      updatePagination(data);
     });
+
+    if (i === currentPage) {
+      listItem.classList.add('pagination-active');
+    }
+
     paginationContainer.appendChild(listItem);
   }
+
+  const nextPageItem = document.createElement('li');
+  nextPageItem.innerHTML = `<a href="#"><span uk-icon="icon: chevron-right"></span></a>`;
+  nextPageItem.addEventListener('click', () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      showPage(data, currentPage);
+      updatePagination(data);
+    }
+  });
+  paginationContainer.appendChild(nextPageItem);
+
+  const lastPageItem = document.createElement('li');
+  lastPageItem.innerHTML = `<a href="#"><span uk-icon="icon:  chevron-double-right
+  "></span></a>`;
+  lastPageItem.addEventListener('click', () => {
+    currentPage = totalPages;
+    showPage(data, currentPage);
+    updatePagination(data);
+  });
+  paginationContainer.appendChild(lastPageItem);
 }
 
 function createBarChart(data, containerId, showTitle) {
+  data.sort((a, b) => a.Released_Year - b.Released_Year);
+
   const years = data.map(movie => movie.Released_Year);
   const grossData = data.map(movie => parseFloat(movie.Gross.replace(/,/g, '')));
 
   const barChartContainer = document.getElementById(containerId);
+  let axisColor;
+  if (document.querySelector('.uk-offcanvas-bar').contains(barChartContainer)) {
+    axisColor = '#FFFFFF';
+  } else {
+    axisColor = '#333';
+  }
   const barChart = echarts.init(barChartContainer);
 
   const option = {
+    darkMode: document.body.classList.contains('high-contrast'),
     xAxis: {
       type: 'category',
-      data: years
+      data: years,
+      axisLine: {
+        lineStyle: {
+          color: axisColor
+        }
+      }
     },
     yAxis: {
       type: 'value',
       name: 'Ingresos',
       nameTextStyle: {
-        color: '#333'
+        color: axisColor
+      },
+      axisLine: {
+        lineStyle: {
+          color: axisColor
+        }
       }
     },
     series: [{
@@ -96,13 +165,7 @@ function createBarChart(data, containerId, showTitle) {
   };
 
   if (showTitle) {
-    option.title = {
-      text: 'Ingresos por Año',
-      textStyle: {
-        color: 'white',
-        fontSize: 14
-      }
-    };
+    document.getElementById(containerId + '-title').innerText = 'Ingresos por Año';
   }
 
   barChart.setOption(option);
@@ -118,24 +181,28 @@ function createPieChart(data, containerId, showTitle) {
   });
 
   const pieChartContainer = document.getElementById(containerId);
+  let labelColor;
+  if (document.querySelector('.uk-offcanvas-bar').contains(pieChartContainer)) {
+    labelColor = '#FFFFFF';
+  } else {
+    labelColor = '#333';
+  }
   const pieChart = echarts.init(pieChartContainer);
 
   const option = {
+    darkMode: document.body.classList.contains('high-contrast'),
     series: [{
       type: 'pie',
       radius: '55%',
-      data: movieCountByYear
+      data: movieCountByYear,
+      label: {
+        color: labelColor
+      }
     }]
   };
 
   if (showTitle) {
-    option.title = {
-      text: 'Número de Películas por Año',
-      textStyle: {
-        color: 'white',
-        fontSize: 14
-      }
-    };
+    document.getElementById(containerId + '-title').innerText = 'Películas por Año';
   }
 
   pieChart.setOption(option);
@@ -151,19 +218,17 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       return response.json();
     })
-    .then(fetchedData => { // Cambia 'data' a 'fetchedData' aquí
+    .then(fetchedData => {
       console.log('Datos obtenidos correctamente:', fetchedData);
-      data = fetchedData; // Asigna 'fetchedData' a la variable 'data' global aquí
+      data = fetchedData;
       showPage(data, currentPage);
       updatePagination(data);
 
-      // Después de obtener los datos y actualizar las gráficas, inicializa el offcanvas
       const offcanvas = UIkit.offcanvas('#offcanvas-nav');
 
-      // Asegúrate de que el offcanvas se inicialice después de que el fetch haya tenido éxito
       offcanvas.$el.addEventListener('shown', function () {
         createBarChart(data, 'bar-chart', true);
-        createPieChart(data, 'pie-chart', true); 
+        createPieChart(data, 'pie-chart', true);
       });
     })
     .catch(error => {
@@ -173,27 +238,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
-
   UIkit.util.on('#offcanvas-nav', 'show', function () {
-      console.log('offcanvas-nav show');
-      document.querySelector('header > :nth-child(2)').classList.add('header-shift');
-  });
-  
-  UIkit.util.on('#offcanvas-nav', 'hide', function () {
-      console.log('offcanvas-nav hide');
-      document.querySelector('header > :nth-child(2)').classList.remove('header-shift');
+    console.log('offcanvas-nav show');
+    document.querySelector('header > :nth-child(2)').classList.add('header-shift');
   });
 
-  UIkit.util.on('#ingresos-por-anio', 'shown', function() {
-    setTimeout(function() {
+  UIkit.util.on('#offcanvas-nav', 'hide', function () {
+    console.log('offcanvas-nav hide');
+    document.querySelector('header > :nth-child(2)').classList.remove('header-shift');
+  });
+
+  UIkit.util.on('#ingresos-por-anio', 'shown', function () {
+    setTimeout(function () {
       createBarChart(data, 'bar-chart-modal', false);
     }, 0);
   });
-  
-  UIkit.util.on('#peliculas-por-anio', 'shown', function() {
-    setTimeout(function() {
+
+  UIkit.util.on('#peliculas-por-anio', 'shown', function () {
+    setTimeout(function () {
       createPieChart(data, 'pie-chart-modal', false);
     }, 0);
   });
-
 });
+
+
+
+// Alto Contraste
+function toggleHighContrast() {
+  document.body.classList.toggle('high-contrast');
+}
+
+document.getElementById('toggleContrastButton').addEventListener('click', toggleHighContrast);
